@@ -45,7 +45,7 @@ namespace j0n6s.RadixDlt.Utils.Primitives
         /// <param name="ofs">The offset within the buffer to start conversion.</param>
         /// <param name="len">The number of bytes to convert.</param>
         /// <returns>A {@link String} of length {@code len}.</returns>
-        public static String fromAsciiBytes(byte[] bytes, int ofs, int len)
+        public static String FromASCIIBytes(byte[] bytes, int ofs, int len)
         {
             char[] chars = new char[len];
             for (int i = 0; i < len; ++i)

@@ -91,5 +91,33 @@ namespace j0n6s.RadixDlt.Utils.Primitives
             }
             return sb.ToString();
         }
+
+        public static byte[] FromHexString(string s)
+        {
+            int byteCount = (s.Length + 1) / 2;
+            byte[] bytes = new byte[byteCount];
+            int index = 0;
+            int offset = 0;
+            // If an odd number of chars, assume leading zero
+            if ((s.Length & 1) != 0)
+            {
+                bytes[offset++] = FromHexNybble(s[index++]);
+            }
+            while (index < s.Length)
+            {
+                byte msn = FromHexNybble(s[index++]);
+                byte lsn = FromHexNybble(s[index++]);
+                bytes[offset++] = (byte)((msn << 4) | lsn);
+            }
+            return bytes;
+        }
+
+        public static string ToBase64String(byte[] bytes)
+        {
+            
+            
+            return Strings.FromASCIIBytes(result, 0, result.length);
+        }
+
     }
 }
