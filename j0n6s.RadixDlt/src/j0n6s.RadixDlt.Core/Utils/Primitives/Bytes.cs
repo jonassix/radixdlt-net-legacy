@@ -69,6 +69,11 @@ namespace j0n6s.RadixDlt.Utils.Primitives
             return Encoding.UTF8.GetString(bytes);
         }
 
+        /// <summary>
+        /// Convert a byte into a two-digit hex string.
+        /// 
+        /// Note that digits a-f are output as lower case.
+        /// </summary>
         public static string ToHexString(byte b)
         {
             char[] value = {
@@ -112,11 +117,58 @@ namespace j0n6s.RadixDlt.Utils.Primitives
             return bytes;
         }
 
+
+        /// <summary>
+        ///     
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public static string ToBase64String(byte[] bytes)
         {
-            
-            
-            return Strings.FromASCIIBytes(result, 0, result.length);
+            // TODO : this might night to comply with https://tools.ietf.org/html/rfc4648
+            return Convert.ToBase64String(bytes);                        
+        }
+
+        public static byte[] FromBase64String(string s)
+        {
+            return Convert.FromBase64String(s);
+        }
+
+        private static char ToHexChar(int value)
+        {
+            return hexChars[value & 0xF];
+        }
+
+        private static byte FromHexNybble(char value)
+        {
+            char c = Char.ToLower(value);
+            if (c >= '0' && c <= '9')
+            {
+                return (byte)(c - '0');
+            }
+            if (c >= 'a' && c <= 'f')
+            {
+                return (byte)(10 + c - 'a');
+            }
+            throw new ArgumentException("Unknown hex digit: " + value);
+        }
+
+        public static byte[] TrimLeadingZeros(byte[] bytes)
+        {
+            if (bytes == null || bytes.Length <= 1 || bytes[0] != 0)
+            {
+                return bytes;
+            }
+            int trimLeadingZeros = 1;
+            int maxTrim = bytes.Length - 1;
+            while (trimLeadingZeros < maxTrim && bytes[trimLeadingZeros] == 0)
+            {
+                trimLeadingZeros += 1;
+            }
+
+            byte[] result = new byte[bytes.Length - trimLeadingZeros];
+            Array.Copy(bytes, trimLeadingZeros, result, 0, bytes.Length - trimLeadingZeros);
+            return result;
         }
 
     }
