@@ -40,7 +40,16 @@ namespace j0n6s.RadixDlt.Identity
                 throw new ArgumentException($"publickey must be 33 in lenghth but was : {publicKey.Length()}");
 
             byte[] addressBytes = new byte[1 + publicKey.Length() + 4];
+            // Universe magic byte
             addressBytes[0] = (byte)(magic & 0xff);
+            publicKey.CopyPublicKey(addressBytes, 1);
+            // Checksum
+            byte[] check = RadixHash.Of(addressBytes, 0, publicKey.Length() + 1).ToByteArray();
+
+            Array.Copy(check, 0, addressBytes, publicKey.Length() + 1, 4);
+
+            _addressBase58 = Base58.ToBase58(addressBytes);
+            _pubKey = publicKey;
         }
 
     }

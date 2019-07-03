@@ -19,18 +19,14 @@ namespace j0n6s.RadixDlt.Identity
 
         public ECPublicKey(byte[] publicKey)
         {
-            publicKey.CopyTo(_publicKey, publicKey.Length);
+            _publicKey = new byte[publicKey.Length];
+            Array.Copy(publicKey, _publicKey,publicKey.Length);
         }
 
       
         public virtual EUID GetEUID()
         {
             return RadixHash.Of(_publicKey).ToEUID();
-        }
-
-        public virtual ECKeyPair GetECKeyPair()
-        {
-            throw new System.NotImplementedException();
         }
 
         public virtual bool Verify(byte[] data, ECSignature signature)

@@ -91,5 +91,12 @@ namespace j0n6s.RadixDlt.Utils
                 hex.AppendFormat("{0:x2}", b);
             return hex.ToString();
         }
+
+        public virtual byte[] ToByteArray()
+        {
+            byte[] result = new byte[_hash.Length];
+            _hash.CopyTo(result, 0);
+            return result;
+        }
     }
 }
