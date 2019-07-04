@@ -52,5 +52,10 @@ namespace j0n6s.RadixDlt.Identity
             _pubKey = publicKey;
         }
 
+        public override string ToString()
+        {
+            return _addressBase58;
+        }
+
     }
 }
