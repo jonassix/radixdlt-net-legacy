@@ -36,14 +36,15 @@ namespace j0n6s.RadixDlt.Identity
             var domainParams = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H, curve.GetSeed());
 
             var secureRandom = new SecureRandom();
-            var keyParams = new ECKeyGenerationParameters(domainParams, secureRandom);
+            var keyParams = new ECKeyGenerationParameters(domainParams, secureRandom);  
 
-            var generator = new ECKeyPairGenerator(KEYPAIRALGO);
+            var generator = new ECKeyPairGenerator(KEYPAIRALGO);           
             generator.Init(keyParams);
             var keyPair = generator.GenerateKeyPair();            
+           
 
             var privateKey = (keyPair.Private as ECPrivateKeyParameters).D.ToByteArrayUnsigned();
-            var publicKey = (keyPair.Public as ECPublicKeyParameters).Q.GetEncoded();
+            var publicKey = (keyPair.Public as ECPublicKeyParameters).Q.GetEncoded(true);
 
             return new ECKeyPair(privateKey, publicKey);
         }
@@ -57,7 +58,7 @@ namespace j0n6s.RadixDlt.Identity
             ECPoint q = domainParams.G.Multiply(d);
 
             var publicParams = new ECPublicKeyParameters(q, domainParams);
-            var pubkey = new ECPublicKey(publicParams.Q.GetEncoded());
+            var pubkey = new ECPublicKey(publicParams.Q.GetEncoded(true));
 
             return new ECKeyPair(privateKey, pubkey);
         }
