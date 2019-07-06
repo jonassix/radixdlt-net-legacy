@@ -10,9 +10,13 @@ namespace j0n6s.RadixDlt.Identity
         private readonly string _addressBase58;
         private readonly ECPublicKey _pubKey;
 
+        /// <summary>
+        ///     Create a RadixAddres from a base58 string
+        /// </summary>
+        /// <param name="addressBase58"></param>
         public RadixAddress(string addressBase58)
         {
-            byte[] raw = Base58.FromBase58(addressBase58);
+            byte[] raw = Base58Encoding.Decode(addressBase58);
             RadixHash check = RadixHash.Of(raw, 0, raw.Length - 4);
 
             for (int i = 0; i < 4; ++i)
@@ -31,6 +35,11 @@ namespace j0n6s.RadixDlt.Identity
 
         }
 
+        /// <summary>
+        ///     Create a RadixAddress from a Elliptic Curve Public Key
+        /// </summary>
+        /// <param name="magic"></param>
+        /// <param name="publicKey"></param>
         public RadixAddress(int magic, ECPublicKey publicKey)
         {
             if (publicKey == null)            
@@ -43,12 +52,13 @@ namespace j0n6s.RadixDlt.Identity
             // Universe magic byte
             addressBytes[0] = (byte)(magic & 0xff);
             publicKey.CopyPublicKey(addressBytes, 1);
+
             // Checksum
             byte[] check = RadixHash.Of(addressBytes, 0, publicKey.Length() + 1).ToByteArray();
-
             Array.Copy(check, 0, addressBytes, publicKey.Length() + 1, 4);
 
-            _addressBase58 = Base58.ToBase58(addressBytes);
+            //_addressBase58 = Base58.ToBase58(addressBytes);
+            _addressBase58 = Base58Encoding.Encode(addressBytes);
             _pubKey = publicKey;
         }
 
@@ -57,5 +67,9 @@ namespace j0n6s.RadixDlt.Identity
             return _addressBase58;
         }
 
+        public virtual ECPublicKey GetECPublicKey()
+        {
+            return _pubKey;
+        }
     }
 }

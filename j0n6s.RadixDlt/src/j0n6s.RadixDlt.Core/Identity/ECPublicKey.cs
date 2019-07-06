@@ -46,7 +46,7 @@ namespace j0n6s.RadixDlt.Identity
 
         public virtual void CopyPublicKey(byte[] dest, int destPos)
         {
-            Array.Copy(_publicKey, 0, dest, destPos, dest.Length);
+            Array.Copy(_publicKey, 0, dest, destPos, _publicKey.Length);
         }
     }
 }

@@ -30,6 +30,10 @@ namespace j0n6s.RadixDlt.Identity
             PrivateKey = new ECPrivateKey(privateKey);
         }
 
+        /// <summary>
+        ///     Generate a Random KeyPair
+        /// </summary>
+        /// <returns></returns>
         public static ECKeyPair GenerateRandomKeyPair()
         {
             var curve = ECNamedCurveTable.GetByName(CURVEALGO);
@@ -45,11 +49,16 @@ namespace j0n6s.RadixDlt.Identity
 
             var privateKey = (keyPair.Private as ECPrivateKeyParameters).D.ToByteArray();
             //var privateKey = (keyPair.Private as ECPrivateKeyParameters).D.ToByteArrayUnsigned();
-            var publicKey = (keyPair.Public as ECPublicKeyParameters).Q.GetEncoded();
+            var publicKey = (keyPair.Public as ECPublicKeyParameters).Q.GetEncoded(true);
 
             return new ECKeyPair(privateKey, publicKey);
         }
 
+        /// <summary>
+        ///     Generate a public key from a private key
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
         public static ECKeyPair GenerateKeyPair(ECPrivateKey privateKey)
         {
             var curve = ECNamedCurveTable.GetByName(CURVEALGO);
@@ -59,11 +68,17 @@ namespace j0n6s.RadixDlt.Identity
             ECPoint q = domainParams.G.Multiply(d);
 
             var publicParams = new ECPublicKeyParameters(q, domainParams);
-            var pubkey = new ECPublicKey(publicParams.Q.GetEncoded());
+            var pubkey = new ECPublicKey(publicParams.Q.GetEncoded(true));
 
             return new ECKeyPair(privateKey, pubkey);
         }
 
+        /// <summary>
+        ///     Verify if a publickey and privatekey belong together
+        /// </summary>
+        /// <param name="privKey"></param>
+        /// <param name="pubKey"></param>
+        /// <returns></returns>
         public static bool Verify(ECPrivateKey privKey, ECPublicKey pubKey)
         {
             var pair = GenerateKeyPair(privKey);

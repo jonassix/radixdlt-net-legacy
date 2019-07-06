@@ -6,6 +6,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 using System;
 using System.Linq;
+using System.Threading;
 
 namespace ManualTester
 {
@@ -16,6 +17,14 @@ namespace ManualTester
             var pair = ECKeyPair.GenerateRandomKeyPair();
             var rAdr = new RadixAddress(-1355743231, pair.PublicKey);
             Console.WriteLine(rAdr.ToString());
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
+            Console.ReadLine();
         }
 
         //static AsymmetricCipherKeyPair GenerateKeyPair()
