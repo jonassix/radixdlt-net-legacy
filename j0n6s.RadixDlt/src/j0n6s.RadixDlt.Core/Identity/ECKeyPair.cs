@@ -34,7 +34,7 @@ namespace j0n6s.RadixDlt.Identity
         ///     Generate a Random KeyPair
         /// </summary>
         /// <returns></returns>
-        public static ECKeyPair GenerateRandomKeyPair()
+        public static ECKeyPair GenerateRandomKeyPair(bool compressed = true)
         {
             var curve = ECNamedCurveTable.GetByName(CURVEALGO);
             var domainParams = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H, curve.GetSeed());
@@ -49,7 +49,7 @@ namespace j0n6s.RadixDlt.Identity
 
             var privateKey = (keyPair.Private as ECPrivateKeyParameters).D.ToByteArray();
             //var privateKey = (keyPair.Private as ECPrivateKeyParameters).D.ToByteArrayUnsigned();
-            var publicKey = (keyPair.Public as ECPublicKeyParameters).Q.GetEncoded(true);
+            var publicKey = (keyPair.Public as ECPublicKeyParameters).Q.GetEncoded(compressed);
 
             return new ECKeyPair(privateKey, publicKey);
         }
@@ -59,7 +59,7 @@ namespace j0n6s.RadixDlt.Identity
         /// </summary>
         /// <param name="privateKey"></param>
         /// <returns></returns>
-        public static ECKeyPair GenerateKeyPair(ECPrivateKey privateKey)
+        public static ECKeyPair GenerateKeyPair(ECPrivateKey privateKey, bool compressed = true)
         {
             var curve = ECNamedCurveTable.GetByName(CURVEALGO);
             var domainParams = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H, curve.GetSeed());
@@ -68,10 +68,11 @@ namespace j0n6s.RadixDlt.Identity
             ECPoint q = domainParams.G.Multiply(d);
 
             var publicParams = new ECPublicKeyParameters(q, domainParams);
-            var pubkey = new ECPublicKey(publicParams.Q.GetEncoded(true));
+            var pubkey = new ECPublicKey(publicParams.Q.GetEncoded(compressed));
 
             return new ECKeyPair(privateKey, pubkey);
-        }
+        }        
+
 
         /// <summary>
         ///     Verify if a publickey and privatekey belong together
@@ -79,11 +80,16 @@ namespace j0n6s.RadixDlt.Identity
         /// <param name="privKey"></param>
         /// <param name="pubKey"></param>
         /// <returns></returns>
-        public static bool Verify(ECPrivateKey privKey, ECPublicKey pubKey)
+        public static bool VerifyValidKeyPair(ECPrivateKey privKey, ECPublicKey pubKey)
         {
             var pair = GenerateKeyPair(privKey);
             
             return pair.PublicKey.Base64Array.SequenceEqual(pubKey.Base64Array);
+        }
+
+        public static bool VerifyValidKeyPair(ECKeyPair keyPair)
+        {
+            return VerifyValidKeyPair(keyPair.PrivateKey, keyPair.PublicKey);
         }
     }
 }
