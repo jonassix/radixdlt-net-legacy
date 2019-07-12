@@ -29,11 +29,6 @@ namespace j0n6s.RadixDlt.Identity
             return RadixHash.Of(_publicKey).ToEUID();
         }
 
-        public virtual bool Verify(byte[] data, ECSignature signature)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual byte[] Encrypt(byte[] data)
         {
             throw new NotImplementedException();

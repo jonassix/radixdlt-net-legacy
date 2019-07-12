@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Org.BouncyCastle.Asn1.Sec;
+using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Signers;
+using Org.BouncyCastle.Math;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,9 +13,9 @@ namespace j0n6s.RadixDlt.Identity
     {
         private readonly byte[] _privateKey;
 
-        public string Base64 => Convert.ToBase64String(_privateKey);
+        public virtual string Base64 => Convert.ToBase64String(_privateKey);
 
-        public byte[] Base64Array
+        public virtual byte[] Base64Array
         {
             get
             {
@@ -25,9 +30,5 @@ namespace j0n6s.RadixDlt.Identity
             _privateKey = new byte[privateKey.Length];
             Array.Copy(privateKey, _privateKey, privateKey.Length);
         }
-
-
-
-
-    }
+     }
 }

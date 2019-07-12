@@ -12,9 +12,9 @@ namespace j0n6s.RadixDlt.Core.Tests
         [Fact]
         public void Base58FromTo_tests()
         {
-            var bA = Base58.FromBase58(validBase58);
+            var bA = Base58Encoding.Decode(validBase58);
 
-            var base58str = Base58.ToBase58(bA);
+            var base58str = Base58Encoding.Encode(bA);
 
             base58str.ShouldBe(validBase58);
         }
