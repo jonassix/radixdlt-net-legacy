@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using j0n6s.RadixDlt.Identity;
+using Org.BouncyCastle.Math;
 
 namespace j0n6s.RadixDlt.Utils
 {
@@ -13,20 +12,20 @@ namespace j0n6s.RadixDlt.Utils
         
         private RadixHash(byte[] hash)
         {
-            _hash = hash ?? throw new ArgumentNullException("hash");
+            _hash = hash ?? throw new ArgumentNullException(nameof(hash));
         }
         public static RadixHash Of(byte[] raw)
         {
             using (SHA256 hash = SHA256.Create())
             {
-                return new RadixHash(hash.ComputeHash(raw));
+                return new RadixHash(hash.ComputeHash(hash.ComputeHash(raw)));
             }            
         }
         public static RadixHash Of(byte[] raw, int offset, int length)
         {
             using (SHA256 hash = SHA256.Create())
             {
-                return new RadixHash(hash.ComputeHash(raw,offset,length));
+                return new RadixHash(hash.ComputeHash(hash.ComputeHash(raw,offset,length)));
             }
         }
 
@@ -46,15 +45,15 @@ namespace j0n6s.RadixDlt.Utils
         }
 
         public EUID ToEUID()
-        {
-            throw new NotImplementedException();
+        {            
+            return new EUID(ArrayHelpers.SubArray(_hash));
         }
 
         public static RadixHash Sha512Of(byte[] raw)
         {
             using (SHA512 hash = SHA512.Create())
             {
-                return new RadixHash(hash.ComputeHash(raw));
+                return new RadixHash(hash.ComputeHash(hash.ComputeHash(raw)));
             }                
         }
 
@@ -76,7 +75,7 @@ namespace j0n6s.RadixDlt.Utils
 
         public override int GetHashCode()
         {                       
-            return new BigInteger(_hash).GetHashCode();
+            return new BigInteger(1,_hash).GetHashCode();
         }
 
         public override string ToString()
