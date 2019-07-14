@@ -70,5 +70,10 @@ namespace j0n6s.RadixDlt.Identity
         {
             return(long)_value.S1;
         }
+
+        public override string ToString()
+        {
+            return _value.ToString("x2");
+        }
     }
 }

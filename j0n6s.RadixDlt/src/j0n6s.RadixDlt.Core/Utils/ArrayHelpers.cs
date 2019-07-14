@@ -42,7 +42,7 @@ namespace j0n6s.RadixDlt.Utils
             return result;
         }
 
-        public static T[] SubArray<T>(T[] arr, int start)
+        public static T[] SubArray<T>(T[] arr, int start = 0)
         {
             return SubArray(arr, start, arr.Length - start);
         }

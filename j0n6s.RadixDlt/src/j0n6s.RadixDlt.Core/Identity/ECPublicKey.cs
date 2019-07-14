@@ -43,5 +43,10 @@ namespace j0n6s.RadixDlt.Identity
         {
             Array.Copy(_publicKey, 0, dest, destPos, _publicKey.Length);
         }
+
+        public override string ToString()
+        {
+            return Base64;
+        }
     }
 }

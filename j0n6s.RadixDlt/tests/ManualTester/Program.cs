@@ -8,23 +8,13 @@ namespace ManualTester
     {
         static void Main(string[] args)
         {
+            RadixAddress address = new RadixAddress("JF42V22No24ekweEbLXa872yWydh2r2yM89hyq2pxjCmcQTwUPo");
 
+            Console.WriteLine($"addres is {address}");
+            Console.WriteLine($"pubkey is {address.GetECPublicKey()}");
+            Console.WriteLine($"euid is {address.GetEUID()}");            
         }
 
-        private static void GeneratingRandomRadixAddresses()
-        {
-            var pair = ECKeyPair.GenerateRandomKeyPair();
-            var rAdr = new RadixAddress(-1355743231, pair.PublicKey);
-            Console.WriteLine(rAdr.ToString());
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.WriteLine(new RadixAddress(-1355743231, ECKeyPair.GenerateRandomKeyPair().PublicKey));
-            Console.ReadLine();
-        }
 
 
 

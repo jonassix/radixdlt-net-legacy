@@ -57,7 +57,8 @@ namespace j0n6s.RadixDlt.Core.Tests.Identity
             var pair = _manager.GetRandomKeyPair();
 
             var signature = _manager.GetECSignature(pair.PrivateKey, Encoding.ASCII.GetBytes(toSign));
-
+            _manager.VerifyECSignature(pair.PublicKey, signature, Encoding.ASCII.GetBytes(toSign)).ShouldBe(true);
+            _manager.VerifyECSignature(pair.PublicKey, signature, Encoding.ASCII.GetBytes(toSign+" ")).ShouldBe(false);
         }
     }
 }

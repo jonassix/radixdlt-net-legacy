@@ -71,5 +71,10 @@ namespace j0n6s.RadixDlt.Identity
         {
             return _pubKey;
         }
+
+        public EUID GetEUID()
+        {
+            return _pubKey.GetEUID();
+        }
     }
 }
