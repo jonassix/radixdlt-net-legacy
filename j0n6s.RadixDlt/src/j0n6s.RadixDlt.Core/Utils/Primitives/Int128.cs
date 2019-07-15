@@ -77,6 +77,9 @@ namespace j0n6s.RadixDlt.Utils.Primitives
         public bool IsNegative { get { return v.S1 > long.MaxValue; } }
         public int Sign { get { return IsNegative ? -1 : v.Sign; } }
 
+        public long High { get { return (long)S1; } }
+        public long Low { get { return (long)S0; } }
+
         public int NumberOfLeadingZeros()
         {
             if(S0 == 0)
@@ -103,6 +106,13 @@ namespace j0n6s.RadixDlt.Utils.Primitives
         public string ToString(string format, IFormatProvider provider)
         {
             return ((BigInteger)this).ToString(format, provider);
+        }
+
+        public static Int128 Create(long low, long high)
+        {
+            Int128 c;
+            UInt128.Create(out c.v, (ulong)low, (ulong)high);
+            return c;
         }
 
         public static explicit operator Int128(double a)

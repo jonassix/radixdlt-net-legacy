@@ -1,4 +1,5 @@
 ﻿using j0n6s.RadixDlt.Identity;
+using j0n6s.RadixDlt.Utils.Primitives;
 using System;
 using System.Linq;
 
@@ -12,7 +13,11 @@ namespace ManualTester
 
             Console.WriteLine($"addres is {address}");
             Console.WriteLine($"pubkey is {address.GetECPublicKey()}");
-            Console.WriteLine($"euid is {address.GetEUID()}");            
+            Console.WriteLine($"euid is {address.GetEUID()}");
+
+            long b = -100;
+            ulong a =(ulong)b;
+            Console.WriteLine(a);
         }
 
 

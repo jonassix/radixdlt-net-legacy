@@ -40,9 +40,7 @@ namespace j0n6s.RadixDlt.Identity
             long high = Longs.FromByteArray(newBytes, 0);
             long low = Longs.FromByteArray(newBytes, 8);
 
-            UInt128.Create(out UInt128 c, (ulong)high, (ulong)low);
-
-            _value = new Int128(c);
+            _value = Int128.Create(low, high);
         }
 
 
@@ -63,12 +61,12 @@ namespace j0n6s.RadixDlt.Identity
 
         public long GetShard()
         {
-            return (long)_value.S0;
+            return _value.High;
         }
 
         public long GetLow()
         {
-            return(long)_value.S1;
+            return _value.Low;
         }
 
         public override string ToString()
