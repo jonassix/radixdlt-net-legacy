@@ -1,15 +1,22 @@
 ﻿using j0n6s.RadixDlt.Utils;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Asn1.X9;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Crypto.Macs;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Math.EC;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -116,15 +123,123 @@ namespace j0n6s.RadixDlt.Identity.Managers
             var randomKeyPair = GetRandomKeyPair();
 
             //  Do an EC point multiply with publicKey and random keypair. This gives you a point M.
-            var m = GetECPoint(publicKey).Multiply(new BigInteger(1,randomKeyPair.PrivateKey.Base64Array)).Normalize();
+            var m = GetECPoint(publicKey).Multiply(new BigInteger(1, randomKeyPair.PrivateKey.Base64Array)).Normalize();
 
             //  Use the X component of point M and calculate the SHA512 hash H.
             byte[] h = RadixHash.Sha512Of(m.AffineXCoord.GetEncoded()).ToByteArray();
 
             //  The first 32 bytes of H are called key_e and the last 32 bytes are called key_m.
-            byte[] keyE = Org.BouncyCastle.Utilities.Arrays.CopyOfRange(h, 0, 32);
-            byte[] keyM = Org.BouncyCastle.Utilities.Arrays.CopyOfRange(h, 32, 64);
+            byte[] keyE = Arrays.CopyOfRange(h, 0, 32);
+            byte[] keyM = Arrays.CopyOfRange(h, 32, 64);
+            byte[] encrypted = Crypt(true, data, iv, keyE);
 
+            //  Calculate a 32 byte MAC with HMACSHA256, using key_m as salt and
+            //  IV + ephemeral.pub + cipher text as data. Call the output MAC.
+            byte[] mac = CalculateMAC(keyM, iv, randomKeyPair.PublicKey, encrypted);
+
+            //  Write out the encryption result IV +ephemeral.pub + encrypted + MAC
+            using (var memstr = new MemoryStream())
+            {
+                memstr.Write(iv, 0, iv.Length);
+                memstr.WriteByte((byte)randomKeyPair.PublicKey.Length());
+                memstr.Write(randomKeyPair.PublicKey.Base64Array, 0, randomKeyPair.PublicKey.Length());
+                memstr.Write(BitConverter.GetBytes(encrypted.Length), 0, 4);
+                memstr.Write(encrypted, 0, iv.Length);
+                memstr.Write(mac, 0, mac.Length);
+
+                return memstr.ToArray();
+            }
+        }
+
+        protected virtual byte[] Crypt(bool encrypt, byte[] data, byte[] iv, byte[] keyE)
+        {
+            //  Pad the input text to a multiple of 16 bytes, in accordance to PKCS7.
+            BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CbcBlockCipher(new AesEngine()), new Pkcs7Padding());
+
+            ICipherParameters parms = new ParametersWithIV(new KeyParameter(keyE), iv);
+
+            //  Encrypt the data with AES - 256 - CBC, using IV as initialization vector,
+            //  key_e as encryption key and the padded input text as payload. Call the output cipher text.
+            cipher.Init(encrypt, parms);
+
+            byte[] buffer = new byte[cipher.GetOutputSize(data.Length)];
+
+            int length = cipher.ProcessBytes(data, 0, data.Length, buffer, 0);
+            length += cipher.DoFinal(buffer, length);
+
+            byte[] encrypted;
+            if (length < buffer.Length)
+                encrypted = Arrays.CopyOfRange(buffer, 0, length);
+            else encrypted = buffer;
+            return encrypted;
+        }
+
+        public virtual byte[] Decrypt(ECPrivateKey privateKey, byte[] data)
+        {
+            using (var stream = new MemoryStream(data))
+            {
+                //  read the IV
+                byte[] iv = new byte[16];
+                stream.Read(iv, 0, iv.Length);
+
+                //  read the publickey
+                var pubkeysize = stream.ReadByte();
+                byte[] pubkeyraw = new byte[pubkeysize];
+                stream.Read(pubkeyraw, 0, pubkeyraw.Length);
+                var pubkey = new ECPublicKey(pubkeyraw);
+
+                //  Do an EC point multiply with this.getPrivateKey() and ephemeral public key. This gives you a point M.
+                var m = GetECPoint(pubkey);
+
+                //  Use the X component of point M and calculate the SHA512 hash H.
+                byte[] h = RadixHash.Sha512Of(m.XCoord.GetEncoded()).ToByteArray();
+
+                //  The first 32 bytes of H are called key_e and the last 32 bytes are called key_m.
+                byte[] keyE = Arrays.CopyOfRange(h, 0, 32);
+                byte[] keyM = Arrays.CopyOfRange(h, 32, 64);
+
+                //  Read encrypted data
+                var size = new byte[4];
+                stream.Read(size, 0, size.Length);
+                byte[] encrypted = new byte[BitConverter.ToInt32(size,0)];
+                stream.Read(encrypted, 0, encrypted.Length);
+
+                //  Read MAC
+                byte[] mac = new byte[32];
+                stream.Read(mac, 0, mac.Length);
+
+                //  Compare MAC with MAC'. If not equal, decryption will fail.
+                byte[] pkMac = CalculateMAC(keyM, iv, pubkey, encrypted);
+                if (pkMac != mac)
+                    throw new ApplicationException
+                        ($"Decryption failed, mac mismatch , {Convert.ToBase64String(pkMac)} <> {Convert.ToBase64String(mac)}");
+
+                //  Decrypt the cipher text with AES-256-CBC, using IV as initialization vector, key_e as decryption key,
+                //  and the cipher text as payload. The output is the padded input text.
+                return Crypt(false, iv, encrypted, keyE);
+            }
+        }
+
+        public virtual byte[] CalculateMAC(byte[] salt, byte[] iv, ECPublicKey publicKey, byte[] encrypted)
+        {
+            var hmac = new HMac(new Sha256Digest());
+            hmac.Init(new KeyParameter(salt));
+            byte[] result = new byte[hmac.GetMacSize()];
+
+            using (var stream = new MemoryStream())
+            {
+                stream.Write(iv, 0, iv.Length);
+                stream.Write(publicKey.Base64Array, 0, publicKey.Length());
+                stream.Write(encrypted, 0, encrypted.Length);
+
+                var msg = stream.ToArray();
+
+                hmac.BlockUpdate(msg, 0, msg.Length);
+            }
+                
+            hmac.DoFinal(result, 0);
+
+            return result;
         }
 
         public virtual ECPoint GetECPoint(ECPublicKey publicKey)
