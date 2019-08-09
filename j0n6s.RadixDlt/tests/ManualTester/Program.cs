@@ -1,6 +1,4 @@
-﻿using j0n6s.RadixDlt.Identity;
-using j0n6s.RadixDlt.Identity.Managers;
-using j0n6s.RadixDlt.Utils.Primitives;
+﻿using j0n6s.RadixDlt.EllipticCurve.Managers;
 using System;
 using System.Linq;
 using System.Text;
