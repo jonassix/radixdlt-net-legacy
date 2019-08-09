@@ -1,4 +1,4 @@
-﻿using j0n6s.RadixDlt.Utils.Primitives;
+﻿using j0n6s.RadixDlt.Primitives;
 using System;
 using System.Globalization;
 

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using j0n6s.RadixDlt.Identity;
 using Org.BouncyCastle.Math;
 
-namespace j0n6s.RadixDlt.Utils
+namespace j0n6s.RadixDlt.Hashing
 {
     public class RadixHash
     {
@@ -44,10 +43,10 @@ namespace j0n6s.RadixDlt.Utils
             Array.Copy(_hash, 0, array, offset, length);
         }
 
-        public EUID ToEUID()
-        {            
-            return new EUID(ArrayHelpers.SubArray(_hash));
-        }
+        //public EUID ToEUID()
+        //{            
+        //    return new EUID(ArrayHelpers.SubArray(_hash));
+        //}
 
         public static RadixHash Sha512Of(byte[] raw)
         {

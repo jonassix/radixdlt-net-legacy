@@ -1,13 +1,6 @@
-﻿using Org.BouncyCastle.Asn1.Sec;
-using Org.BouncyCastle.Crypto.Digests;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Crypto.Signers;
-using Org.BouncyCastle.Math;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace j0n6s.RadixDlt.Identity
+namespace j0n6s.RadixDlt.EllipticCurve
 {
     public class ECPrivateKey : IBase64Encoded
     {

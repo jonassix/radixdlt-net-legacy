@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 
-namespace j0n6s.RadixDlt.Utils.Primitives
+namespace j0n6s.RadixDlt.Primitives
 {
     public struct UInt128 : IFormattable, IComparable, IComparable<UInt128>, IEquatable<UInt128>
     {

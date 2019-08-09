@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace j0n6s.RadixDlt.Utils
+namespace j0n6s.RadixDlt
 {
     public class ArrayHelpers
     {

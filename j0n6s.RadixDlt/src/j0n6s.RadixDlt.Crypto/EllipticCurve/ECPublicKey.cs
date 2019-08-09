@@ -1,9 +1,6 @@
-﻿using j0n6s.RadixDlt.Identity.Managers;
-using j0n6s.RadixDlt.Utils;
-using Org.BouncyCastle.Security;
-using System;
+﻿using System;
 
-namespace j0n6s.RadixDlt.Identity
+namespace j0n6s.RadixDlt.EllipticCurve
 {
     public class ECPublicKey : IBase64Encoded
     {
@@ -23,29 +20,7 @@ namespace j0n6s.RadixDlt.Identity
         {
             _publicKey = new byte[publicKey.Length];
             Array.Copy(publicKey, _publicKey,publicKey.Length);
-        }
-
-      
-        public virtual EUID GetEUID()
-        {
-            return RadixHash.Of(_publicKey).ToEUID();
-        }
-
-        //public virtual byte[] Encrypt(byte[] data)
-        //{
-        //    var rand = new SecureRandom();
-
-        //    // 2. Generate 16 random bytes using a secure random number generator. Call them IV
-        //    byte[] iv = new byte[16];
-        //    rand.NextBytes(iv);
-
-        //    // 3. Generate a new ephemeral EC key pair
-        //    new ECKeyManager().
-        //    ECKeyPair ephemeral = ECKeyPairGenerator.newInstance().generateKeyPair((publicKey.length - 1) * 8);
-
-
-        //    throw new NotImplementedException();
-        //}
+        }    
 
         public virtual int Length()
         {

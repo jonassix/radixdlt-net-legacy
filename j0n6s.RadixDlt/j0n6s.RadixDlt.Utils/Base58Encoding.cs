@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace j0n6s.RadixDlt.Utils
+namespace j0n6s.RadixDlt
 {
     public static class Base58Encoding
     {     

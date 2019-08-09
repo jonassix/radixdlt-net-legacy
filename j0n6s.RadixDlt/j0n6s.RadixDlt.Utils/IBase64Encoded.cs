@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace j0n6s.RadixDlt.Identity
+namespace j0n6s.RadixDlt
 {
-    interface IBase64Encoded
+    public interface IBase64Encoded
     {
         //string GetBase64string();
         string Base64 { get; }

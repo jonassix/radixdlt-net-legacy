@@ -1,4 +1,4 @@
-﻿namespace j0n6s.RadixDlt.Utils.Primitives
+﻿namespace j0n6s.RadixDlt.Primitives
 {
     /// <summary>
     ///     Utilities for manipulating primitive {@code int} values.

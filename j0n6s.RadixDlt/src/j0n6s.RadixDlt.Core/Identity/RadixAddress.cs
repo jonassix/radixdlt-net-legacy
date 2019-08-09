@@ -1,4 +1,5 @@
-﻿using j0n6s.RadixDlt.Utils;
+﻿using j0n6s.RadixDlt.EllipticCurve;
+using j0n6s.RadixDlt.Hashing;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -72,9 +73,9 @@ namespace j0n6s.RadixDlt.Identity
             return _pubKey;
         }
 
-        public EUID GetEUID()
-        {
-            return _pubKey.GetEUID();
-        }
+        //public EUID GetEUID()
+        //{
+        //    return _pubKey.GetEUID();
+        //}
     }
 }

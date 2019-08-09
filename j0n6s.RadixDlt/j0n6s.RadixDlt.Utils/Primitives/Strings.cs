@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace j0n6s.RadixDlt.Utils.Primitives
+namespace j0n6s.RadixDlt.Primitives
 {
     /// <summary>
     ///      Some useful string handling methods, currently mostly here for performance reasons.

@@ -1,9 +1,6 @@
 ﻿using Org.BouncyCastle.Math.EC;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace j0n6s.RadixDlt.Identity.Managers
+namespace j0n6s.RadixDlt.EllipticCurve.Managers
 {
     public interface IECKeyManager
     {

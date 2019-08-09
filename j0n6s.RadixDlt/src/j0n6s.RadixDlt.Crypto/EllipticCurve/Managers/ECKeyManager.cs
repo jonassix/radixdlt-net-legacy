@@ -1,4 +1,4 @@
-﻿using j0n6s.RadixDlt.Utils;
+﻿using j0n6s.RadixDlt.Hashing;
 using Org.BouncyCastle.Asn1.Sec;
 using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Crypto;
@@ -20,7 +20,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace j0n6s.RadixDlt.Identity.Managers
+namespace j0n6s.RadixDlt.EllipticCurve.Managers
 {
     public class ECKeyManager : IECKeyManager
     {

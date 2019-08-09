@@ -1,9 +1,9 @@
-﻿using j0n6s.RadixDlt.Utils.Primitives;
+﻿using j0n6s.RadixDlt.Primitives;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Utilities.Encoders;
 
-namespace j0n6s.RadixDlt.Identity
+namespace j0n6s.RadixDlt.EllipticCurve
 {
     public class ECSignature
     {
