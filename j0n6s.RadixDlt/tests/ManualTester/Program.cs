@@ -1,7 +1,9 @@
 ﻿using j0n6s.RadixDlt.Identity;
+using j0n6s.RadixDlt.Identity.Managers;
 using j0n6s.RadixDlt.Utils.Primitives;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace ManualTester
 {
@@ -9,15 +11,17 @@ namespace ManualTester
     {
         static void Main(string[] args)
         {
-            RadixAddress address = new RadixAddress("JF42V22No24ekweEbLXa872yWydh2r2yM89hyq2pxjCmcQTwUPo");
+            IECKeyManager keyman = new ECKeyManager();
 
-            Console.WriteLine($"addres is {address}");
-            Console.WriteLine($"pubkey is {address.GetECPublicKey()}");
-            Console.WriteLine($"euid is {address.GetEUID()}");
+            var keypair = keyman.GetRandomKeyPair();
 
-            long b = -100;
-            ulong a =(ulong)b;
-            Console.WriteLine(a);
+            var msg = "toencrypt";
+
+            var encrypteddata = keyman.Encrypt(keypair.PublicKey, Encoding.UTF8.GetBytes(msg));
+
+            var decrypteddata = Encoding.UTF8.GetString( keyman.Decrypt(keypair.PrivateKey, encrypteddata));
+
+            Console.WriteLine(decrypteddata);
         }
 
 

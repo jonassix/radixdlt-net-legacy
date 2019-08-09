@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Math.EC;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -46,5 +47,13 @@ namespace j0n6s.RadixDlt.Identity.Managers
         /// <param name="data"></param>
         /// <returns></returns>
         bool VerifyECSignature(ECPublicKey publicKey, ECSignature signature, byte[] data);
+
+        ECPoint GetECPoint(ECPublicKey publicKey);
+
+        byte[] CalculateMAC(byte[] salt, byte[] iv, ECPublicKey publicKey, byte[] encrypted);
+
+        byte[] Decrypt(ECPrivateKey privateKey, byte[] data);
+
+        byte[] Encrypt(ECPublicKey publicKey, byte[] data);
     }
 }

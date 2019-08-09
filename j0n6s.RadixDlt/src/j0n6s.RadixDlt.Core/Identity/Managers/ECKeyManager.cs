@@ -144,7 +144,7 @@ namespace j0n6s.RadixDlt.Identity.Managers
                 memstr.WriteByte((byte)randomKeyPair.PublicKey.Length());
                 memstr.Write(randomKeyPair.PublicKey.Base64Array, 0, randomKeyPair.PublicKey.Length());
                 memstr.Write(BitConverter.GetBytes(encrypted.Length), 0, 4);
-                memstr.Write(encrypted, 0, iv.Length);
+                memstr.Write(encrypted, 0, encrypted.Length);
                 memstr.Write(mac, 0, mac.Length);
 
                 return memstr.ToArray();
@@ -189,7 +189,7 @@ namespace j0n6s.RadixDlt.Identity.Managers
                 var pubkey = new ECPublicKey(pubkeyraw);
 
                 //  Do an EC point multiply with this.getPrivateKey() and ephemeral public key. This gives you a point M.
-                var m = GetECPoint(pubkey);
+                var m = GetECPoint(pubkey).Multiply(new BigInteger(1,privateKey.Base64Array)).Normalize();
 
                 //  Use the X component of point M and calculate the SHA512 hash H.
                 byte[] h = RadixHash.Sha512Of(m.XCoord.GetEncoded()).ToByteArray();
@@ -210,13 +210,13 @@ namespace j0n6s.RadixDlt.Identity.Managers
 
                 //  Compare MAC with MAC'. If not equal, decryption will fail.
                 byte[] pkMac = CalculateMAC(keyM, iv, pubkey, encrypted);
-                if (pkMac != mac)
+                if (pkMac.Equals(mac))
                     throw new ApplicationException
                         ($"Decryption failed, mac mismatch , {Convert.ToBase64String(pkMac)} <> {Convert.ToBase64String(mac)}");
 
                 //  Decrypt the cipher text with AES-256-CBC, using IV as initialization vector, key_e as decryption key,
                 //  and the cipher text as payload. The output is the padded input text.
-                return Crypt(false, iv, encrypted, keyE);
+                return Crypt(false, encrypted, iv, keyE);
             }
         }
 
