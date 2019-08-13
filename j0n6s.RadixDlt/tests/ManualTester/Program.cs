@@ -1,4 +1,5 @@
 ﻿using j0n6s.RadixDlt.EllipticCurve.Managers;
+using PeterO.Cbor;
 using System;
 using System.Linq;
 using System.Text;
@@ -9,23 +10,40 @@ namespace ManualTester
     {
         static void Main(string[] args)
         {
-            IECKeyManager keyman = new ECKeyManager();
+            var mapper = new DsonMapper();
+            var bytes = mapper.Test();
+            var dummy = mapper.Test2(bytes);
 
-            var keypair = keyman.GetRandomKeyPair();
-
-            var msg = "toencrypt";
-
-            var encrypteddata = keyman.Encrypt(keypair.PublicKey, Encoding.UTF8.GetBytes(msg));
-
-            var decrypteddata = Encoding.UTF8.GetString( keyman.Decrypt(keypair.PrivateKey, encrypteddata));
-
-            Console.WriteLine(decrypteddata);
+            Console.WriteLine(dummy.PropB);
         }
 
 
+        public class DsonMapper
+        {
 
+            public byte[] Test()
+            {
+                var dummy = new AClass()
+                {
+                    PropA = 1,
+                    PropB = 5
+                };
 
+                var cborTest = CBORObject.FromObject(dummy);
+                return cborTest.EncodeToBytes();
+            }
 
-        static string ToHex(byte[] data) => String.Concat(data.Select(x => x.ToString("x2")));
+            public AClass Test2(byte[] bytes)
+            {
+                var cbortest = CBORObject.DecodeFromBytes(bytes);
+                return cbortest.ToObject<AClass>();
+            }
+        }
+
+        public class AClass
+        {
+            public int PropA { get; set; }
+            public int PropB { get; set; }
+        }
     }
 }

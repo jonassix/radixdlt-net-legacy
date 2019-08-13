@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\j0n6s.RadixDlt.Crypto\j0n6s.RadixDlt.Crypto.csproj" />
+    <ProjectReference Include="..\j0n6s.RadixDlt.Dson\j0n6s.RadixDlt.Dson.csproj" />
   </ItemGroup>
 
 </Project>

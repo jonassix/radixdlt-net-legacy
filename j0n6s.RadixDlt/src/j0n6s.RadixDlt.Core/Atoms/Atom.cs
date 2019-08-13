@@ -1,14 +1,27 @@
-﻿using System;
+﻿using j0n6s.RadixDlt.EllipticCurve;
+using j0n6s.RadixDlt.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace j0n6s.RadixDlt.Core
+namespace j0n6s.RadixDlt.Atoms
 {
-    public class Atom : IAtom
+    /// <summary>
+    ///     An atom is the fundamental atomic unit of storage on the ledger 
+    ///     (similar to a block in a blockchain) and defines the actions 
+    ///     that can be issued onto the ledger.
+    /// </summary>
+    public class Atom
     {
-        public IParticleGroup ParticleGroup { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ICollection<Signature> Signatures { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IDictionary<string, string> Metadata { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ITemporalProof TemporalProof { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public static string METADATA_TIMESTAMP_KEY = "timestamp";
+	    public static string METADATA_POW_NONCE_KEY = "powNonce";
+        public List<ParticleGroup> ParticleGroups  { get; set; }
+        public Dictionary<string,ECSignature> Signatures { get; set; }
+        public Dictionary<string, string> MetaData { get; set; }
+        public AID Id { get; set; }
     }
+
+    
+
+
 }
