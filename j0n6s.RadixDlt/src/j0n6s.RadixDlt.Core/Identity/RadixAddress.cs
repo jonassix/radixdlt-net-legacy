@@ -73,9 +73,19 @@ namespace j0n6s.RadixDlt.Identity
             return _pubKey;
         }
 
-        //public EUID GetEUID()
-        //{
-        //    return _pubKey.GetEUID();
-        //}
+        public override bool Equals(object obj)
+        {
+            if (!(obj is RadixAddress))
+                return false;
+
+            var adr = (RadixAddress)obj;
+
+            return adr._addressBase58 == _addressBase58;
+        }
+
+        public override int GetHashCode()
+        {
+            return -1408821578 + EqualityComparer<string>.Default.GetHashCode(_addressBase58);
+        }
     }
 }

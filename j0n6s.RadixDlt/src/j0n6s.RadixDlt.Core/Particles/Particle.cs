@@ -18,6 +18,6 @@ namespace j0n6s.RadixDlt.Particles
         public Particle(HashSet<EUID> destinations)
         {
             _destinations = new HashSet<EUID>(destinations);
-        }
+        }        
     }
 }

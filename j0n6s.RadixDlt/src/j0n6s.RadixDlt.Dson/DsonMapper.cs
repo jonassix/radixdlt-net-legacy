@@ -9,6 +9,7 @@ namespace j0n6s.RadixDlt
     {
         public byte[] ToDson(T obj)
         {
+            var o = CBORObject.FromObject(obj);            
             return CBORObject.FromObject(obj).EncodeToBytes();
         }
         

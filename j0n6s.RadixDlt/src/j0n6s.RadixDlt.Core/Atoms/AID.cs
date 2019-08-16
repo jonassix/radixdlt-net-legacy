@@ -14,7 +14,7 @@ namespace j0n6s.RadixDlt.Atoms
 
         private readonly byte[] _bytes = new byte[HASH_BYTES_SIZE + SHARD_BYTES_SIZE];
 
-        public long Shard => Longs.FromByteArray(_bytes, SHARD_BYTES_SIZE);
+        public long Shard => Longs.FromByteArray(_bytes, HASH_BYTES_SIZE);
 
         public AID(byte[] bytes)
         {
@@ -36,6 +36,11 @@ namespace j0n6s.RadixDlt.Atoms
         public AID(string hexBytes)
             : this(Bytes.FromHexString(hexBytes))
         {
+        }
+
+        public override string ToString()
+        {
+            return Bytes.ToHexString(_bytes);            
         }
 
 
