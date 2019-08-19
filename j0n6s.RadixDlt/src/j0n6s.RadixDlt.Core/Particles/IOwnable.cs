@@ -7,6 +7,6 @@ namespace j0n6s.RadixDlt.Particles
 {
     public interface IOwnable
     {
-        RadixAddress RadixAddress { get; }
+        RadixAddress Address { get; }
     }
 }
