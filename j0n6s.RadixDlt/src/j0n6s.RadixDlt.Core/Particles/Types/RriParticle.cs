@@ -12,9 +12,9 @@ namespace j0n6s.RadixDlt.Particles.Types
         public RRI RRI { get; protected set; }        
         public long Nonce { get; }
 
-        public HashSet<RadixAddress> RadixAddresses => new HashSet<RadixAddress>() { RRI.Address };
+        public HashSet<RadixAddress> Addresses => new HashSet<RadixAddress>() { RRI.Address };
 
-        public RriParticle(RRI rri) : base(new EUIDManager().GetEUID(rri.Address))
+        public RriParticle(RRI rri) : base(rri.Address.EUID)
         {
             RRI = rri;
             Nonce = 0;

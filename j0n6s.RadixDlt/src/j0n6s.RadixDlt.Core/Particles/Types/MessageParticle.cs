@@ -17,7 +17,7 @@ namespace j0n6s.RadixDlt.Particles.Types
         public byte[] Bytes { get; }
         public long Nonce { get; }
         
-        public HashSet<RadixAddress> RadixAddresses => new HashSet<RadixAddress>() { From, To };
+        public HashSet<RadixAddress> Addresses => new HashSet<RadixAddress>() { From, To };
 
         public MessageParticle(
             RadixAddress from,
@@ -30,7 +30,7 @@ namespace j0n6s.RadixDlt.Particles.Types
         private static HashSet<EUID> ConvertToEUID(RadixAddress from, RadixAddress to)
         {
             var manager = new EUIDManager();
-            return new HashSet<EUID>() { manager.GetEUID(from),manager.GetEUID(to) };
+            return new HashSet<EUID>() { from.EUID, to.EUID};
         }
 
         public MessageParticle(

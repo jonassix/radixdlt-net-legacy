@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
-using j0n6s.RadixDlt.Identity;
-using j0n6s.RadixDlt.Identity.Managers;
+﻿using j0n6s.RadixDlt.Identity;
 
 namespace j0n6s.RadixDlt.Particles.Types
 {
@@ -15,7 +10,7 @@ namespace j0n6s.RadixDlt.Particles.Types
         public long Nonce { get; }
 
         public UniqueParticle(RadixAddress address, string name) 
-            : base(new EUIDManager().GetEUID(address))
+            : base(address.EUID)
         {
             Name = name;
             Address = address;

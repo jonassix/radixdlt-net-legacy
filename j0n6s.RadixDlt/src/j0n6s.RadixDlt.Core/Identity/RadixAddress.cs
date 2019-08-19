@@ -1,5 +1,6 @@
 ﻿using j0n6s.RadixDlt.EllipticCurve;
 using j0n6s.RadixDlt.Hashing;
+using j0n6s.RadixDlt.Identity.Managers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,17 @@ namespace j0n6s.RadixDlt.Identity
     {
         private readonly string _addressBase58;
         private readonly ECPublicKey _pubKey;
+
+        private EUID euid;
+        public EUID EUID
+        {
+            get
+            {
+                if (euid == null)
+                    euid = new EUIDManager().GetEUID(this);
+                return euid;
+            }
+        }
 
         /// <summary>
         ///     Create a RadixAddres from a base58 string

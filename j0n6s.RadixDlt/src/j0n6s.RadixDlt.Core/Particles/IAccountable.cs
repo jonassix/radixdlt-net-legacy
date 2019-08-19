@@ -7,6 +7,6 @@ namespace j0n6s.RadixDlt.Particles
 {
     public interface IAccountable
     {
-        HashSet<RadixAddress> RadixAddresses { get; }
+        HashSet<RadixAddress> Addresses { get; }
     }
 }
