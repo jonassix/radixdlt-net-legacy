@@ -7,10 +7,10 @@ namespace j0n6s.RadixDlt.Particles
     public class SpunParticle<T>
         where T : Particle
     {
-        public Particle Particle { get; }
+        public T Particle { get; }
         public Spin Spin { get; }
 
-        public SpunParticle(Particle particle, Spin spin)
+        public SpunParticle(T particle, Spin spin)
         {
             Particle = particle;
             Spin = spin;

@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 
 namespace j0n6s.RadixDlt.Atoms
-{
+{    
+
     public class ParticleGroup<T>
         where T : Particle
     {
